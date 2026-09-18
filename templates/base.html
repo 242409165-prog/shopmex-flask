@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ShopFlask{% endblock %} — ShopFlask</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-4" href="{{ url_for('index') }}">
+      <i class="fas fa-store me-2"></i>ShopProyect
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-home me-1"></i>Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('productos') }}"><i class="fas fa-box me-1"></i>Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('contacto') }}"><i class="fas fa-envelope me-1"></i>Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('acerca') }}"><i class="fas fa-info-circle me-1"></i>Acerca de</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('terminos') }}"><i class="fas fa-file-alt me-1"></i>Términos</a></li>
+      </ul>
+      <ul class="navbar-nav align-items-center gap-2">
+        {% if session.user_id %}
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="{{ url_for('carrito') }}">
+              <i class="fas fa-shopping-cart"></i>
+              {% if cart_count > 0 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ cart_count }}</span>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <i class="fas fa-user-circle me-1"></i>{{ session.user_name }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{{ url_for('cuenta') }}"><i class="fas fa-user-cog me-2"></i>Mi Cuenta</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('carrito') }}"><i class="fas fa-shopping-cart me-2"></i>Mi Carrito</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
+            </ul>
+          </li>
+        {% else %}
+          <li class="nav-item"><a class="btn btn-outline-light btn-sm me-1" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt me-1"></i>Ingresar</a></li>
+          <li class="nav-item"><a class="btn btn-warning btn-sm" href="{{ url_for('registro') }}"><i class="fas fa-user-plus me-1"></i>Registrarse</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- FLASH MESSAGES -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="container mt-3">
+    {% for cat, msg in messages %}
+    <div class="alert alert-{{ cat }} alert-dismissible fade show shadow-sm" role="alert">
+      <i class="fas fa-{{ 'check-circle' if cat=='success' else 'exclamation-triangle' if cat=='warning' else 'times-circle' if cat=='danger' else 'info-circle' }} me-2"></i>
+      {{ msg }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<!-- MAIN CONTENT -->
+<main>{% block content %}{% endblock %}</main>
+
+<!-- FOOTER -->
+<footer class="bg-dark text-white mt-5 py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <h5 class="fw-bold"><i class="fas fa-store me-2 text-primary"></i>ShopProyect</h5>
+        <p class="text-muted small">Tu tienda en línea de confianza. Productos de calidad con los mejores precios.</p>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-bold mb-3">Navegación</h6>
+        <ul class="list-unstyled small">
+          <li><a href="{{ url_for('index') }}" class="text-muted text-decoration-none"><i class="fas fa-chevron-right me-1"></i>Inicio</a></li>
+          <li><a href="{{ url_for('productos') }}" class="text-muted text-decoration-none"><i class="fas fa-chevron-right me-1"></i>Productos</a></li>
+          <li><a href="{{ url_for('contacto') }}" class="text-muted text-decoration-none"><i class="fas fa-chevron-right me-1"></i>Contacto</a></li>
+          <li><a href="{{ url_for('acerca') }}" class="text-muted text-decoration-none"><i class="fas fa-chevron-right me-1"></i>Acerca de</a></li>
+          <li><a href="{{ url_for('terminos') }}" class="text-muted text-decoration-none"><i class="fas fa-chevron-right me-1"></i>Términos y Privacidad</a></li>
+          <li><a href="{{ url_for('registro') }}" class="text-muted text-decoration-none"><i class="fas fa-chevron-right me-1"></i>Registrarse</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-bold mb-3">Contacto</h6>
+        <p class="text-muted small"><i class="fas fa-envelope me-2"></i>contacto@shopproyect.com</p>
+        <p class="text-muted small"><i class="fas fa-phone me-2"></i>+52 322 241 8920</p>
+        <p class="text-muted small"><i class="fas fa-phone me-2"></i>+52 322 136 5120</p>
+        <p class="text-muted small"><i class="fas fa-map-marker-alt me-2"></i>Puerto Vallarta, Jalisco, México</p>
+      </div>
+    </div>
+    <hr class="border-secondary">
+    <p class="text-center text-muted small mb-0">&copy; 2024 ShopProyect — Desarrollado con <i class="fas fa-heart text-danger"></i> usando Flask &amp; Python</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Mi Carrito{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4"><i class="fas fa-shopping-cart me-2 text-primary"></i>Mi Carrito</h2>
+  {% if cart %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      {% for item in cart %}
+      <div class="card border-0 shadow-sm rounded-4 mb-3">
+        <div class="card-body d-flex align-items-center gap-3">
+          <img src="{{ item.image }}" alt="{{ item.title }}" style="width:70px;height:70px;object-fit:contain;" class="rounded bg-light p-1">
+          <div class="flex-grow-1">
+            <h6 class="fw-semibold mb-1">{{ item.title[:60] }}…</h6>
+            <span class="text-primary fw-bold">${{ "{:,.2f}".format(usd_to_mxn(item.price)) }} MXN</span>
+            <span class="text-muted ms-2">× {{ item.qty }}</span>
+          </div>
+          <div class="text-end">
+            <div class="fw-bold mb-1 text-primary">${{ "{:,.2f}".format(usd_to_mxn(item.price * item.qty)) }}</div>
+            <small class="text-muted d-block mb-2">MXN</small>
+            <a href="{{ url_for('eliminar_carrito', pid=item.id) }}" class="btn btn-outline-danger btn-sm">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top:90px">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">Resumen del pedido</h5>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Subtotal</span>
+            <span>${{ "{:,.2f}".format(usd_to_mxn(total)) }} MXN</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Envío</span>
+            <span class="text-success fw-semibold">Gratis</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold fs-5 mb-4">
+            <span>Total</span>
+            <span class="text-primary">${{ "{:,.2f}".format(usd_to_mxn(total)) }} MXN</span>
+          </div>
+          <a href="{{ url_for('checkout') }}" class="btn btn-warning w-100 btn-lg fw-bold">
+            <i class="fas fa-credit-card me-2"></i>Finalizar Compra
+          </a>
+          <a href="{{ url_for('productos') }}" class="btn btn-outline-secondary w-100 mt-2">
+            <i class="fas fa-arrow-left me-2"></i>Seguir comprando
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <i class="fas fa-shopping-cart fs-1 text-muted mb-3"></i>
+    <h4 class="text-muted">Tu carrito está vacío</h4>
+    <p class="text-muted">Agrega productos desde el catálogo</p>
+    <a href="{{ url_for('productos') }}" class="btn btn-primary btn-lg mt-2">
+      <i class="fas fa-box me-2"></i>Ver Productos
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

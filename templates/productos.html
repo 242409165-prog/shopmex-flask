@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}Productos{% endblock %}
+{% block content %}
+
+<section class="bg-primary text-white py-4">
+  <div class="container">
+    <h2 class="fw-bold mb-1"><i class="fas fa-box me-2"></i>Nuestros Productos</h2>
+    <p class="mb-0 opacity-75">{{ products|length }} productos disponibles — precios en pesos mexicanos (MXN)</p>
+  </div>
+</section>
+
+<div class="container py-4">
+  <!-- Filtros -->
+  <div class="d-flex flex-wrap gap-2 mb-4 align-items-center">
+    <span class="fw-semibold text-muted me-2">Filtrar:</span>
+    <a href="{{ url_for('productos') }}" class="btn btn-sm {{ 'btn-primary' if not categoria else 'btn-outline-secondary' }}">
+      Todos
+    </a>
+    {% for cat in categories %}
+    <a href="{{ url_for('productos', categoria=cat) }}"
+       class="btn btn-sm {{ 'btn-primary' if categoria==cat else 'btn-outline-secondary' }}">
+      {{ CATEGORIAS_TIENDA.get(cat, cat) }}
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if products %}
+  <div class="row g-4">
+    {% for p in products %}
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card product-card h-100 border-0 shadow-sm rounded-4 overflow-hidden {{ 'opacity-75' if p.stock == 0 else '' }}">
+
+        <!-- Badge stock -->
+        <div class="position-relative">
+          {% if p.stock == 0 %}
+            <span class="position-absolute top-0 start-0 m-2 badge bg-danger z-1">Agotado</span>
+          {% elif p.stock <= 5 %}
+            <span class="position-absolute top-0 start-0 m-2 badge bg-warning text-dark z-1">¡Últimas {{ p.stock }}!</span>
+          {% endif %}
+        </div>
+
+        <div class="product-img-wrap">
+          <img src="{{ p.image }}" alt="{{ p.title }}" class="product-img">
+          <div class="product-overlay">
+            <a href="{{ url_for('producto_detalle', pid=p.id) }}" class="btn btn-light btn-sm">
+              <i class="fas fa-eye me-1"></i>Ver más
+            </a>
+          </div>
+        </div>
+
+        <div class="card-body d-flex flex-column">
+          <p class="small text-muted mb-1 text-uppercase">{{ CATEGORIAS_TIENDA.get(p.category, p.category) }}</p>
+          <h6 class="product-title fw-semibold mb-2">{{ p.title }}</h6>
+          <div class="d-flex align-items-center mb-2">
+            {% set stars = (p.rating.rate | round | int) %}
+            {% for i in range(5) %}
+              <i class="fas fa-star {{ 'text-warning' if i < stars else 'text-muted' }} small"></i>
+            {% endfor %}
+            <span class="text-muted small ms-1">({{ p.rating.count }})</span>
+          </div>
+          <div class="mt-auto d-flex align-items-center justify-content-between">
+            <div>
+              <span class="fs-6 fw-bold text-primary">${{ "{:,.2f}".format(usd_to_mxn(p.price)) }}</span>
+              <small class="text-muted d-block" style="font-size:0.7rem">MXN</small>
+            </div>
+            {% if p.stock == 0 %}
+              <button class="btn btn-secondary btn-sm" disabled>Agotado</button>
+            {% elif session.user_id %}
+              <button class="btn btn-warning btn-sm fw-semibold add-cart-btn"
+                data-id="{{ p.id }}" data-title="{{ p.title }}"
+                data-price="{{ p.price }}" data-image="{{ p.image }}">
+                <i class="fas fa-cart-plus"></i>
+              </button>
+            {% else %}
+              <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-sign-in-alt"></i>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <i class="fas fa-box-open fs-1 text-muted mb-3"></i>
+    <h4 class="text-muted">No hay productos en esta categoría</h4>
+    <a href="{{ url_for('productos') }}" class="btn btn-primary mt-3">Ver todos</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.querySelectorAll('.add-cart-btn').forEach(btn => {
+  btn.addEventListener('click', async function() {
+    const data = {
+      id: parseInt(this.dataset.id),
+      title: this.dataset.title,
+      price: parseFloat(this.dataset.price),
+      image: this.dataset.image
+    };
+    const res = await fetch('/carrito/agregar', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    if (json.ok) {
+      this.innerHTML = '<i class="fas fa-check"></i>';
+      this.classList.replace('btn-warning', 'btn-success');
+      const badge = document.querySelector('.navbar .badge');
+      if (badge) badge.textContent = json.count;
+      setTimeout(() => {
+        this.innerHTML = '<i class="fas fa-cart-plus"></i>';
+        this.classList.replace('btn-success', 'btn-warning');
+      }, 1500);
+    }
+  });
+});
+</script>
+{% endblock %}

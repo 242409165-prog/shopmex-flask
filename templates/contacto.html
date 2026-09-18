@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Contacto{% endblock %}
+{% block content %}
+
+<section class="bg-primary text-white py-4">
+  <div class="container">
+    <h2 class="fw-bold mb-1"><i class="fas fa-envelope me-2"></i>Contacto</h2>
+    <p class="mb-0 opacity-75">Estamos aquí para ayudarte</p>
+  </div>
+</section>
+
+<div class="container py-5">
+  <div class="row g-5">
+    <div class="col-lg-6">
+      <h4 class="fw-bold mb-4">Envíanos un mensaje</h4>
+      <div class="card border-0 shadow-sm rounded-4 p-4">
+        <form method="POST" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nombre completo *</label>
+            <input type="text" name="nombre" class="form-control" placeholder="Tu nombre" required
+              value="{{ session.user_name if session.user_name else '' }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Correo electrónico *</label>
+            <input type="email" name="email" class="form-control" placeholder="tu@correo.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Asunto *</label>
+            <select name="asunto" class="form-select" required>
+              <option value="">Selecciona un asunto…</option>
+              <option>Consulta sobre un producto</option>
+              <option>Problema con mi pedido</option>
+              <option>Devolución o reembolso</option>
+              <option>Información general</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Mensaje *</label>
+            <textarea name="mensaje" class="form-control" rows="5" placeholder="Escribe tu mensaje aquí…" required></textarea>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg fw-bold">
+              <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <h4 class="fw-bold mb-4">Información de contacto</h4>
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3">
+            <div class="icon-box bg-primary text-white rounded-circle"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <h6 class="fw-bold mb-0">Dirección</h6>
+              <p class="text-muted mb-0">Av. Verde Vallarta 210, 48280 Ixtapa, Jal.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3">
+            <div class="icon-box bg-success text-white rounded-circle"><i class="fas fa-phone"></i></div>
+            <div>
+              <h6 class="fw-bold mb-0">Teléfono</h6>
+              <p class="text-muted mb-0">+52 322 348 6219</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3">
+            <div class="icon-box bg-warning text-white rounded-circle"><i class="fas fa-envelope"></i></div>
+            <div>
+              <h6 class="fw-bold mb-0">Correo</h6>
+              <p class="text-muted mb-0">mitienda0918@gmail.com</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3">
+            <div class="icon-box bg-info text-white rounded-circle"><i class="fas fa-clock"></i></div>
+            <div>
+              <h6 class="fw-bold mb-0">Horario de Atención</h6>
+              <p class="text-muted mb-0">Lunes a Viernes: 9:00 – 18:00<br>Sábados: 10:00 – 14:00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

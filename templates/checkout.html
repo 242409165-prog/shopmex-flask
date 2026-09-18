@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}Finalizar Compra{% endblock %}
+{% block content %}
+
+<section class="bg-primary text-white py-4">
+  <div class="container">
+    <h2 class="fw-bold mb-1"><i class="fas fa-credit-card me-2"></i>Finalizar Compra</h2>
+    <p class="mb-0 opacity-75">Completa tu información para procesar el pedido</p>
+  </div>
+</section>
+
+<div class="container py-4">
+  <div class="row g-4">
+
+    <!-- FORMULARIO -->
+    <div class="col-lg-8">
+      <form method="POST">
+
+        <!-- Datos de envío -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+          <h5 class="fw-bold mb-4"><i class="fas fa-truck me-2 text-primary"></i>Datos de Envío</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Nombre completo *</label>
+              <input type="text" name="nombre_envio" class="form-control"
+                value="{{ user.nombre + ' ' + user.apellido }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Teléfono *</label>
+              <input type="tel" name="telefono" class="form-control"
+                value="{{ user.telefono or '' }}" placeholder="+52 322 000 0000" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Dirección *</label>
+              <input type="text" name="direccion" class="form-control"
+                placeholder="Calle, número exterior e interior" required>
+            </div>
+            <div class="col-md-5">
+              <label class="form-label fw-semibold">Ciudad *</label>
+              <input type="text" name="ciudad" class="form-control" placeholder="Ej: Puerto Vallarta" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Estado *</label>
+              <select name="estado" class="form-select" required>
+                <option value="">Selecciona…</option>
+                {% for est in ['Aguascalientes','Baja California','Baja California Sur','Campeche',
+                  'Chiapas','Chihuahua','Ciudad de México','Coahuila','Colima','Durango',
+                  'Estado de México','Guanajuato','Guerrero','Hidalgo','Jalisco','Michoacán',
+                  'Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo',
+                  'San Luis Potosí','Sinaloa','Sonora','Tabasco','Tamaulipas','Tlaxcala',
+                  'Veracruz','Yucatán','Zacatecas'] %}
+                <option value="{{ est }}">{{ est }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">C.P. *</label>
+              <input type="text" name="cp" class="form-control" placeholder="48280"
+                maxlength="5" pattern="\d{5}" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Datos de pago -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+          <h5 class="fw-bold mb-1"><i class="fas fa-credit-card me-2 text-success"></i>Datos de Pago</h5>
+          <p class="text-muted small mb-4"><i class="fas fa-lock me-1 text-success"></i>Tus datos están cifrados y protegidos</p>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">Nombre del titular *</label>
+              <input type="text" name="titular" class="form-control"
+                placeholder="Como aparece en la tarjeta" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Número de tarjeta *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-credit-card text-muted"></i></span>
+                <input type="text" name="num_tarjeta" id="num_tarjeta" class="form-control"
+                  placeholder="0000 0000 0000 0000" maxlength="19" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Fecha de expiración *</label>
+              <input type="text" name="expiry" id="expiry" class="form-control"
+                placeholder="MM/AA" maxlength="5" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">CVV *</label>
+              <input type="password" name="cvv" class="form-control"
+                placeholder="•••" maxlength="4" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-success btn-lg fw-bold py-3">
+            <i class="fas fa-lock me-2"></i>Confirmar Compra — ${{ "{:,.2f}".format(total_mxn) }} MXN
+          </button>
+        </div>
+        <p class="text-center text-muted small mt-2">
+          <i class="fas fa-shield-alt me-1"></i>Compra 100% segura. No guardamos datos de tu tarjeta.
+        </p>
+
+      </form>
+    </div>
+
+    <!-- RESUMEN -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top:90px">
+        <div class="card-header bg-primary text-white rounded-top-4 py-3">
+          <h6 class="fw-bold mb-0"><i class="fas fa-shopping-cart me-2"></i>Resumen del Pedido</h6>
+        </div>
+        <div class="card-body p-3">
+          {% for item in cart %}
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <img src="{{ item.image }}" style="width:50px;height:50px;object-fit:contain;" class="rounded bg-light p-1">
+            <div class="flex-grow-1">
+              <small class="fw-semibold d-block" style="line-height:1.2">{{ item.title[:40] }}…</small>
+              <small class="text-muted">x{{ item.qty }}</small>
+            </div>
+            <small class="fw-bold text-primary">${{ "{:,.2f}".format(usd_to_mxn(item.price * item.qty)) }}</small>
+          </div>
+          {% endfor %}
+          <hr>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted small">Subtotal</span>
+            <span class="small">${{ "{:,.2f}".format(total_mxn) }} MXN</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted small">Envío</span>
+            <span class="text-success small fw-semibold">Gratis</span>
+          </div>
+          <div class="d-flex justify-content-between fw-bold fs-6 border-top pt-2">
+            <span>Total</span>
+            <span class="text-primary">${{ "{:,.2f}".format(total_mxn) }} MXN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+{% block extra_scripts %}
+<script>
+document.getElementById('num_tarjeta').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').substring(0,16);
+  this.value = v.match(/.{1,4}/g)?.join(' ') || v;
+});
+document.getElementById('expiry').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').substring(0,4);
+  if (v.length >= 2) v = v.substring(0,2) + '/' + v.substring(2);
+  this.value = v;
+});
+</script>
+{% endblock %}

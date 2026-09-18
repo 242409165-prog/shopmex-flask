@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-section text-white py-5">
+  <div class="container py-4">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="badge bg-warning text-dark mb-3 px-3 py-2 fs-6">🛒 Tienda en Línea</span>
+        <h1 class="display-4 fw-bold mb-3">Compra lo mejor<br>al mejor precio</h1>
+        <p class="lead mb-4 opacity-75">Descubre miles de productos de calidad con envío rápido y seguro. Tu satisfacción es nuestra prioridad.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="{{ url_for('productos') }}" class="btn btn-warning btn-lg fw-bold px-4">
+            <i class="fas fa-box me-2"></i>Ver Productos
+          </a>
+          {% if not session.user_id %}
+          <a href="{{ url_for('registro') }}" class="btn btn-outline-light btn-lg px-4">
+            <i class="fas fa-user-plus me-2"></i>Registrarse Gratis
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-lg-6 text-center">
+        <div class="hero-icon-container">
+          <i class="fas fa-shopping-bag" style="font-size:180px; opacity:.15; color:#fff;"></i>
+          <div class="hero-badges">
+            <span class="badge bg-success p-3 shadow"><i class="fas fa-shield-alt me-1"></i>Compra Segura</span>
+            <span class="badge bg-info p-3 shadow"><i class="fas fa-truck me-1"></i>Envío Rápido</span>
+            <span class="badge bg-warning text-dark p-3 shadow"><i class="fas fa-star me-1"></i>Calidad Premium</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="py-4 bg-light">
+  <div class="container">
+    <div class="row text-center g-3">
+      <div class="col-6 col-md-3">
+        <div class="stat-card p-3 rounded-3 bg-white shadow-sm">
+          <div class="fs-2 fw-bold text-primary">500+</div>
+          <div class="text-muted small">Productos</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card p-3 rounded-3 bg-white shadow-sm">
+          <div class="fs-2 fw-bold text-success">10K+</div>
+          <div class="text-muted small">Clientes</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card p-3 rounded-3 bg-white shadow-sm">
+          <div class="fs-2 fw-bold text-warning">4.8★</div>
+          <div class="text-muted small">Valoración</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card p-3 rounded-3 bg-white shadow-sm">
+          <div class="fs-2 fw-bold text-danger">24/7</div>
+          <div class="text-muted small">Soporte</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="fw-bold text-center mb-2">Categorías Destacadas</h2>
+    <p class="text-muted text-center mb-4">Encuentra exactamente lo que buscas</p>
+    <div class="row g-4">
+      <div class="col-6 col-md-3">
+        <a href="{{ url_for('productos', categoria='electronics') }}" class="text-decoration-none">
+          <div class="category-card text-center p-4 rounded-4 bg-white shadow-sm border">
+            <i class="fas fa-laptop-code fs-1 text-primary mb-3"></i>
+            <h6 class="fw-bold">Electrónica</h6>
+            <small class="text-muted">Gadgets & Tech</small>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="{{ url_for('productos', categoria='jewelery') }}" class="text-decoration-none">
+          <div class="category-card text-center p-4 rounded-4 bg-white shadow-sm border">
+            <i class="fas fa-gem fs-1 text-warning mb-3"></i>
+            <h6 class="fw-bold">Joyería</h6>
+            <small class="text-muted">Accesorios Finos</small>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="/productos?categoria=men%27s+clothing" class="text-decoration-none">
+          <div class="category-card text-center p-4 rounded-4 bg-white shadow-sm border">
+            <i class="fas fa-tshirt fs-1 text-info mb-3"></i>
+            <h6 class="fw-bold">Ropa Hombre</h6>
+            <small class="text-muted">Moda Masculina</small>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="/productos?categoria=women%27s+clothing" class="text-decoration-none">
+          <div class="category-card text-center p-4 rounded-4 bg-white shadow-sm border">
+            <i class="fas fa-female fs-1 text-danger mb-3"></i>
+            <h6 class="fw-bold">Ropa Mujer</h6>
+            <small class="text-muted">Moda Femenina</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="fw-bold text-center mb-4">¿Por qué elegirnos?</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card text-center p-4 rounded-4 bg-white shadow-sm h-100">
+          <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3">
+            <i class="fas fa-lock fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Pago 100% Seguro</h5>
+          <p class="text-muted small">Tus datos están protegidos con cifrado SSL de última generación.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card text-center p-4 rounded-4 bg-white shadow-sm h-100">
+          <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3">
+            <i class="fas fa-undo fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Devoluciones Fáciles</h5>
+          <p class="text-muted small">30 días para devolver cualquier producto sin preguntas.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card text-center p-4 rounded-4 bg-white shadow-sm h-100">
+          <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3">
+            <i class="fas fa-headset fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Soporte 24/7</h5>
+          <p class="text-muted small">Nuestro equipo está disponible las 24 horas para ayudarte.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+{% if not session.user_id %}
+<section class="py-5 bg-primary text-white text-center">
+  <div class="container">
+    <h2 class="fw-bold mb-3">¿Listo para empezar?</h2>
+    <p class="lead mb-4 opacity-75">Regístrate gratis y descubre todos nuestros productos</p>
+    <a href="{{ url_for('registro') }}" class="btn btn-warning btn-lg fw-bold px-5">
+      <i class="fas fa-rocket me-2"></i>Crear Cuenta Gratis
+    </a>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

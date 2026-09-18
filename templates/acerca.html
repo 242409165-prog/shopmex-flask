@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}Acerca de{% endblock %}
+{% block content %}
+
+<section class="bg-primary text-white py-5 text-center">
+  <div class="container">
+    <h1 class="fw-bold display-5 mb-3"><i class="fas fa-store me-2"></i>ShopProyect</h1>
+    <p class="lead opacity-75">Tu tienda en línea de confianza — desarrollada con pasión y tecnología</p>
+  </div>
+</section>
+
+<div class="container py-5">
+
+  <!-- Mission -->
+  <div class="row g-4 mb-5 align-items-center">
+    <div class="col-md-6">
+      <h3 class="fw-bold mb-3">Nuestra Misión</h3>
+      <p class="text-muted">ShopFlask nace con la misión de ofrecer una experiencia de compra en línea moderna, segura y accesible para todos. Conectamos a compradores con los mejores productos a precios justos.</p>
+      <p class="text-muted">Creemos en la tecnología como motor de cambio para democratizar el comercio electrónico en México y Latinoamérica.</p>
+    </div>
+    <div class="col-md-6 text-center">
+      <div class="bg-primary bg-opacity-10 rounded-4 p-5">
+        <i class="fas fa-bullseye fa-5x text-primary opacity-50"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Values -->
+  <h3 class="fw-bold text-center mb-4">Nuestros Valores</h3>
+  <div class="row g-4 mb-5">
+    {% for v in [
+      ('fa-handshake','Confianza','Construimos relaciones duraderas basadas en la transparencia y la honestidad.','primary'),
+      ('fa-award','Calidad','Solo ofrecemos productos verificados y de alta calidad a nuestros clientes.','success'),
+      ('fa-bolt','Innovación','Constantemente mejoramos nuestra plataforma para ofrecer la mejor experiencia.','warning'),
+      ('fa-users','Comunidad','Somos parte de una comunidad que crece y aprende juntos cada día.','info')
+    ] %}
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 h-100">
+        <i class="fas {{ v[0] }} fa-2x text-{{ v[3] }} mb-3"></i>
+        <h6 class="fw-bold">{{ v[1] }}</h6>
+        <p class="text-muted small">{{ v[2] }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Team -->
+  <h3 class="fw-bold text-center mb-4">Nuestro Equipo</h3>
+  <div class="row g-4 justify-content-center mb-5">
+
+    <!-- Fila 1 -->
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 h-100">
+        <div class="team-avatar bg-primary bg-opacity-10 rounded-circle mx-auto mb-3">
+          <i class="fas fa-user-tie fa-2x text-primary"></i>
+        </div>
+        <h6 class="fw-bold mb-1">Alexander Marcelino Organista</h6>
+        <small class="text-primary fw-semibold">Director General & CEO</small>
+        <p class="text-muted small mt-2">Líder del proyecto y responsable de la dirección estratégica.</p>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 h-100">
+        <div class="team-avatar bg-success bg-opacity-10 rounded-circle mx-auto mb-3">
+          <i class="fas fa-code fa-2x text-success"></i>
+        </div>
+        <h6 class="fw-bold mb-1">Roberto Carlos Loeza Vargas</h6>
+        <small class="text-success fw-semibold">CTO — Desarrollo Full Stack</small>
+        <p class="text-muted small mt-2">Arquitecto de software y entusiasta de Python/Flask.</p>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 h-100">
+        <div class="team-avatar bg-warning bg-opacity-10 rounded-circle mx-auto mb-3">
+          <i class="fas fa-paint-brush fa-2x text-warning"></i>
+        </div>
+        <h6 class="fw-bold mb-1">Katia Olmedo Galindo</h6>
+        <small class="text-warning fw-semibold">Diseñadora UX/UI</small>
+        <p class="text-muted small mt-2">Crea experiencias digitales intuitivas y atractivas.</p>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 h-100">
+        <div class="team-avatar bg-warning bg-opacity-10 rounded-circle mx-auto mb-3">
+          <i class="fas fa-paint-brush fa-2x text-warning"></i>
+        </div>
+        <h6 class="fw-bold mb-1">Fernanda Matilda Jandette Campos</h6>
+        <small class="text-warning fw-semibold">Diseñadora UX/UI</small>
+        <p class="text-muted small mt-2">Especialista en diseño visual y experiencia de usuario.</p>
+      </div>
+    </div>
+
+    <!-- Fila 2 -->
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 h-100">
+        <div class="team-avatar bg-info bg-opacity-10 rounded-circle mx-auto mb-3">
+          <i class="fas fa-chart-line fa-2x text-info"></i>
+        </div>
+        <h6 class="fw-bold mb-1">Jhasbleidy Viridiana Peña Beltrán</h6>
+        <small class="text-info fw-semibold">Marketing Digital</small>
+        <p class="text-muted small mt-2">Estratega de crecimiento digital y redes sociales.</p>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 h-100">
+        <div class="team-avatar bg-info bg-opacity-10 rounded-circle mx-auto mb-3">
+          <i class="fas fa-chart-line fa-2x text-info"></i>
+        </div>
+        <h6 class="fw-bold mb-1">Bárbara Ramírez Vásquez</h6>
+        <small class="text-info fw-semibold">Marketing Digital</small>
+        <p class="text-muted small mt-2">Especialista en campañas digitales y posicionamiento de marca.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tech stack -->
+  <div class="bg-light rounded-4 p-5 text-center">
+    <h4 class="fw-bold mb-4">Tecnologías Utilizadas</h4>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      {% for tech in ['Python','Flask','SQLite','Jinja2','Bootstrap 5','HTML5','CSS3','JavaScript','FakeStore API'] %}
+      <span class="badge bg-primary fs-6 px-3 py-2">{{ tech }}</span>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

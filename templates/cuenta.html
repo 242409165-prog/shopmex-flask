@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% block title %}Mi Cuenta{% endblock %}
+{% block content %}
+
+<section class="bg-primary text-white py-4">
+  <div class="container d-flex align-items-center gap-3">
+    <div class="bg-white bg-opacity-25 rounded-circle p-3">
+      <i class="fas fa-user-circle fa-2x"></i>
+    </div>
+    <div>
+      <h4 class="fw-bold mb-0">{{ user.nombre }} {{ user.apellido }}</h4>
+      <small class="opacity-75"><i class="fas fa-envelope me-1"></i>{{ user.email }}</small>
+    </div>
+  </div>
+</section>
+
+<div class="container py-4">
+  <div class="row g-4">
+
+    <!-- SIDEBAR -->
+    <div class="col-lg-3">
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="list-group list-group-flush">
+          <a href="#perfil" class="list-group-item list-group-item-action py-3 active-tab" onclick="showTab('perfil',this)">
+            <i class="fas fa-user me-2 text-primary"></i>Mi Perfil
+          </a>
+          <a href="#contrasena" class="list-group-item list-group-item-action py-3" onclick="showTab('contrasena',this)">
+            <i class="fas fa-lock me-2 text-warning"></i>Cambiar Contraseña
+          </a>
+          <a href="#pedidos" class="list-group-item list-group-item-action py-3" onclick="showTab('pedidos',this)">
+            <i class="fas fa-shopping-bag me-2 text-success"></i>Mis Pedidos
+          </a>
+          <a href="#eliminar" class="list-group-item list-group-item-action py-3 text-danger" onclick="showTab('eliminar',this)">
+            <i class="fas fa-trash me-2"></i>Eliminar Cuenta
+          </a>
+        </div>
+      </div>
+
+      <!-- Info card -->
+      <div class="card border-0 shadow-sm rounded-4 mt-3 p-3 text-center">
+        <small class="text-muted">Miembro desde</small>
+        <div class="fw-bold text-primary">{{ user.fecha_reg[:10] }}</div>
+        <hr class="my-2">
+        <small class="text-muted">Pedidos realizados</small>
+        <div class="fw-bold text-success fs-4">{{ pedidos|length }}</div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="col-lg-9">
+
+      <!-- ── PERFIL ── -->
+      <div id="tab-perfil">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+          <h5 class="fw-bold mb-4"><i class="fas fa-user me-2 text-primary"></i>Editar Perfil</h5>
+          <form method="POST" action="{{ url_for('editar_cuenta') }}">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Nombre *</label>
+                <input type="text" name="nombre" class="form-control" value="{{ user.nombre }}" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Apellido *</label>
+                <input type="text" name="apellido" class="form-control" value="{{ user.apellido }}" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Correo electrónico *</label>
+                <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Teléfono</label>
+                <input type="tel" name="telefono" class="form-control" value="{{ user.telefono or '' }}">
+              </div>
+              <div class="col-12 mt-2">
+                <button type="submit" class="btn btn-primary fw-bold px-4">
+                  <i class="fas fa-save me-2"></i>Guardar Cambios
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ── CONTRASEÑA ── -->
+      <div id="tab-contrasena" style="display:none">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+          <h5 class="fw-bold mb-4"><i class="fas fa-lock me-2 text-warning"></i>Cambiar Contraseña</h5>
+          <form method="POST" action="{{ url_for('cambiar_contrasena') }}">
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label class="form-label fw-semibold">Contraseña actual *</label>
+                <div class="input-group">
+                  <input type="password" name="actual" id="pw0" class="form-control" required>
+                  <button class="btn btn-outline-secondary" type="button" onclick="toggle('pw0',this)"><i class="fas fa-eye"></i></button>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <label class="form-label fw-semibold">Nueva contraseña * <small class="text-muted">(mín. 6 caracteres)</small></label>
+                <div class="input-group">
+                  <input type="password" name="nueva" id="pw1" class="form-control" required>
+                  <button class="btn btn-outline-secondary" type="button" onclick="toggle('pw1',this)"><i class="fas fa-eye"></i></button>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <label class="form-label fw-semibold">Confirmar nueva contraseña *</label>
+                <div class="input-group">
+                  <input type="password" name="nueva2" id="pw2" class="form-control" required>
+                  <button class="btn btn-outline-secondary" type="button" onclick="toggle('pw2',this)"><i class="fas fa-eye"></i></button>
+                </div>
+              </div>
+              <div class="col-12 mt-2">
+                <button type="submit" class="btn btn-warning fw-bold px-4 text-dark">
+                  <i class="fas fa-key me-2"></i>Actualizar Contraseña
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ── PEDIDOS ── -->
+      <div id="tab-pedidos" style="display:none">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+          <h5 class="fw-bold mb-4"><i class="fas fa-shopping-bag me-2 text-success"></i>Mis Pedidos</h5>
+          {% if pedidos %}
+            {% for p in pedidos %}
+            {% set items = p.productos | tojson | safe %}
+            <div class="card border-0 bg-light rounded-4 mb-3 p-3">
+              <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                <div>
+                  <span class="fw-bold text-primary">#{{ p.id }}</span>
+                  <span class="text-muted ms-2 small"><i class="fas fa-calendar me-1"></i>{{ p.fecha }}</span>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                  <span class="badge bg-success px-3 py-2"><i class="fas fa-check me-1"></i>{{ p.estado }}</span>
+                  <span class="fw-bold fs-6 text-primary">${{ "%.2f"|format(p.total) }}</span>
+                </div>
+              </div>
+              <hr class="my-2">
+              {% set cart = p.productos | fromjson %}
+              <div class="row g-2">
+                {% for item in cart %}
+                <div class="col-12">
+                  <div class="d-flex align-items-center gap-2">
+                    <img src="{{ item.image }}" style="width:40px;height:40px;object-fit:contain;" class="rounded bg-white p-1">
+                    <div class="flex-grow-1">
+                      <small class="fw-semibold">{{ item.title[:50] }}…</small>
+                    </div>
+                    <small class="text-muted">x{{ item.qty }}</small>
+                    <small class="fw-bold text-primary">${{ "%.2f"|format(item.price * item.qty) }}</small>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="text-center py-5">
+              <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+              <h6 class="text-muted">Aún no has realizado ningún pedido</h6>
+              <a href="{{ url_for('productos') }}" class="btn btn-primary mt-3">
+                <i class="fas fa-box me-2"></i>Ver Productos
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- ── ELIMINAR ── -->
+      <div id="tab-eliminar" style="display:none">
+        <div class="card border-0 shadow-sm rounded-4 p-4 border-danger">
+          <h5 class="fw-bold mb-2 text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Eliminar Cuenta</h5>
+          <div class="alert alert-danger">
+            <strong>¡Atención!</strong> Esta acción es permanente e irreversible. Se eliminarán todos tus datos.
+          </div>
+          <form method="POST" action="{{ url_for('eliminar_cuenta') }}" onsubmit="return confirm('¿Estás seguro? Esta acción no se puede deshacer.')">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">Confirma tu contraseña para continuar</label>
+              <div class="input-group">
+                <input type="password" name="password" id="pw3" class="form-control" placeholder="Tu contraseña actual" required>
+                <button class="btn btn-outline-secondary" type="button" onclick="toggle('pw3',this)"><i class="fas fa-eye"></i></button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-danger fw-bold px-4">
+              <i class="fas fa-trash me-2"></i>Eliminar Mi Cuenta Permanentemente
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block extra_scripts %}
+<script>
+function showTab(name, el) {
+  event.preventDefault();
+  // Hide all tabs
+  ['perfil','contrasena','pedidos','eliminar'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = 'none';
+  });
+  // Remove active from all sidebar items
+  document.querySelectorAll('.list-group-item').forEach(i => i.classList.remove('active'));
+  // Show selected
+  document.getElementById('tab-' + name).style.display = 'block';
+  el.classList.add('active');
+}
+
+function toggle(id, btn) {
+  const f = document.getElementById(id);
+  f.type = f.type === 'password' ? 'text' : 'password';
+  btn.innerHTML = f.type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+}
+</script>
+{% endblock %}
